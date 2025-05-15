@@ -1,0 +1,72 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "source ./export-env.sh && npx -y @modelcontextprotocol/server-github"
+      ],
+      "alwaysAllow": [
+        "GITHUB_LIST_REPOS",
+        "GITHUB_GET_REPO",
+        "GITHUB_CREATE_ISSUE",
+        "GITHUB_LIST_ISSUES",
+        "GITHUB_CREATE_PULL_REQUEST",
+        "search_repositories",
+        "create_repository",
+        "create_branch",
+        "create_or_update_file"
+      ]
+    },
+    "perplexityai": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "source ./export-env.sh && npx -y server-perplexity-ask"
+      ],
+      "alwaysAllow": [
+        "perplexity_ask",
+        "perplexity_research",
+        "perplexity_reason"
+      ]
+    },
+    "supabase": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "source ./export-env.sh && npx -y @supabase/mcp-server-supabase@latest --access-token $SUPABASE_ACCESS_TOKEN"
+      ],
+      "alwaysAllow": [
+        "list_tables",
+        "execute_sql",
+        "listTables",
+        "list_projects",
+        "list_organizations",
+        "get_organization",
+        "apply_migration",
+        "get_project",
+        "execute_query",
+        "generate_typescript_types",
+        "listProjects"
+      ]
+    },
+    "firecrawl": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "source ./export-env.sh && npx -y firecrawl-mcp"
+      ],
+      "alwaysAllow": [
+        "FIRECRAWL_CANCEL_CRAWL_JOB",
+        "FIRECRAWL_CRAWL_JOB_STATUS",
+        "FIRECRAWL_MAP_URLS",
+        "FIRECRAWL_CRAWL_URLS",
+        "FIRECRAWL_EXTRACT",
+        "FIRECRAWL_SCRAPE_EXTRACT_DATA_LLM",
+        "FIRECRAWL_SEARCH",
+        "firecrawl_scrape",
+        "firecrawl_extract"
+      ]
+    }
+  }
+}
