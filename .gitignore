@@ -1,4 +1,4 @@
-# Environment variables
+x# Environment variables
 .env
 .env.local
 .env.development.local

@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
-import Button from '../../../../components/landing/Button';
+import Button from '@/components/landing/Button';
 
 describe('Button Component', () => {
   it('renders with correct text', () => {
@@ -13,12 +13,13 @@ describe('Button Component', () => {
   });
   
   it('calls onClick handler when clicked', async () => {
+    const user = userEvent.setup();
     const handleClick = jest.fn();
     const { container } = render(<Button onClick={handleClick}>Click Me</Button>);
     
     const button = container.querySelector('button');
     if (button) {
-      await userEvent.click(button);
+      await user.click(button);
     }
     
     expect(handleClick).toHaveBeenCalledTimes(1);
@@ -64,5 +65,29 @@ describe('Button Component', () => {
     
     const button = container.querySelector('button');
     expect(button).toHaveClass('custom-class');
+  });
+  
+  it('renders as disabled when disabled prop is true', () => {
+    const { container } = render(<Button disabled={true}>Click Me</Button>);
+    
+    const button = container.querySelector('button');
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass('opacity-60');
+    expect(button).toHaveClass('cursor-not-allowed');
+  });
+  
+  it('does not call onClick when disabled', async () => {
+    const user = userEvent.setup();
+    const handleClick = jest.fn();
+    const { container } = render(
+      <Button onClick={handleClick} disabled={true}>Click Me</Button>
+    );
+    
+    const button = container.querySelector('button');
+    if (button) {
+      await user.click(button);
+    }
+    
+    expect(handleClick).not.toHaveBeenCalled();
   });
 });
