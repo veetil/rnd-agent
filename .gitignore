@@ -64,3 +64,25 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Testing
+.nyc_output/
+test-results.json
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
+# Turbo
+.turbo
+
+# Storybook
+storybook-static/
+
+# Vercel
+.vercel
