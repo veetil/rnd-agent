@@ -52,23 +52,23 @@ export default function TechnicalDevelopers() {
                       </div>
                       <div className="space-y-2">
                         <div className="text-blue-400">// Initialize the IdeaCode client</div>
-                        <div className="text-white">const ideacode = new IdeaCode({</div>
+                        <div className="text-white">const ideacode = new IdeaCode({"{"}</div>
                         <div className="text-white pl-4">apiKey: process.env.IDEACODE_API_KEY,</div>
                         <div className="text-white pl-4">modelProvider: 'openai'</div>
-                        <div className="text-white">});</div>
+                        <div className="text-white">{"}"});</div>
                         <div className="text-white"></div>
                         <div className="text-blue-400">// Create an agent workflow</div>
-                        <div className="text-white">const workflow = ideacode.createWorkflow({</div>
+                        <div className="text-white">const workflow = ideacode.createWorkflow({"{"}</div>
                         <div className="text-white pl-4">name: 'customer-support',</div>
                         <div className="text-white pl-4">agents: ['classifier', 'responder', 'escalator'],</div>
-                        <div className="text-white pl-4">memory: { '{' } type: 'persistent' { '}' }</div>
-                        <div className="text-white">});</div>
+                        <div className="text-white pl-4">memory: {"{"} type: 'persistent' {"}"}</div>
+                        <div className="text-white">{"}"});</div>
                         <div className="text-white"></div>
                         <div className="text-blue-400">// Process a user query</div>
-                        <div className="text-white">const result = await workflow.process({</div>
+                        <div className="text-white">const result = await workflow.process({"{"}</div>
                         <div className="text-white pl-4">input: userQuery,</div>
                         <div className="text-white pl-4">context: userHistory</div>
-                        <div className="text-white">});</div>
+                        <div className="text-white">{"}"});</div>
                       </div>
                     </div>
                   </div>

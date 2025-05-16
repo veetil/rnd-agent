@@ -90,7 +90,7 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
               <Link
                 href="/documentation"
                 className={`flex text-gray-600 hover:text-gray-900 py-2 ${
-                  pathname.startsWith('/documentation') ? 'text-blue-600' : ''
+                  pathname?.startsWith('/documentation') ? 'text-blue-600' : ''
                 }`}
                 onClick={() => setOpen(false)}
               >

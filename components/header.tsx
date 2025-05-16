@@ -54,7 +54,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/documentation"
-                  className={`text-gray-600 hover:text-gray-900 px-3 py-2 flex items-center transition duration-150 ease-in-out ${pathname.startsWith('/documentation') ? 'text-blue-600' : ''}`}
+                  className={`text-gray-600 hover:text-gray-900 px-3 py-2 flex items-center transition duration-150 ease-in-out ${pathname?.startsWith('/documentation') ? 'text-blue-600' : ''}`}
                 >
                   Documentation
                 </Link>

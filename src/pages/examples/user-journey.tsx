@@ -213,7 +213,7 @@ export default function UserJourneyExamplePage() {
                         ]}
                         position="inline"
                         variant="primary"
-                        isVisible={true}
+                        show={true}
                       />
                       
                       <ContextualCTA
@@ -225,7 +225,7 @@ export default function UserJourneyExamplePage() {
                         ]}
                         position="inline"
                         variant="success"
-                        isVisible={true}
+                        show={true}
                       />
                     </div>
                   </div>
@@ -257,7 +257,7 @@ export default function UserJourneyExamplePage() {
                             ]}
                             position="floating"
                             variant="info"
-                            isVisible={true}
+                            show={true}
                           />
                         )}
                       </div>
@@ -291,7 +291,7 @@ export default function UserJourneyExamplePage() {
                             variant="warning"
                             trigger="scroll"
                             scrollThreshold={0.5}
-                            isVisible={false}
+                            show={false}
                           />
                           
                           {Array.from({ length: 5 }).map((_, i) => (
