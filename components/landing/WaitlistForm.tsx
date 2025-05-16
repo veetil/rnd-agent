@@ -2,15 +2,16 @@
 
 import React, { useState } from 'react';
 import Button from './Button';
+import { addToWaitlist } from '@/src/utils/supabase';
 
 interface WaitlistFormProps {
   onSubmit?: (email: string) => Promise<void>;
   className?: string;
 }
 
-const WaitlistForm: React.FC<WaitlistFormProps> = ({ 
-  onSubmit = async () => {}, 
-  className = '' 
+const WaitlistForm: React.FC<WaitlistFormProps> = ({
+  onSubmit,
+  className = ''
 }) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -43,11 +44,23 @@ const WaitlistForm: React.FC<WaitlistFormProps> = ({
     
     try {
       setIsSubmitting(true);
-      await onSubmit(email);
+      
+      // If custom onSubmit is provided, use it
+      if (onSubmit) {
+        await onSubmit(email);
+      } else {
+        // Otherwise use the Supabase integration
+        const result = await addToWaitlist(email);
+        
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+      }
+      
       setIsSuccess(true);
       setEmail('');
-    } catch (err) {
-      setSubmitError('Something went wrong. Please try again later.');
+    } catch (err: any) {
+      setSubmitError(err.message || 'Something went wrong. Please try again later.');
       console.error('Waitlist submission error:', err);
     } finally {
       setIsSubmitting(false);
@@ -98,8 +111,9 @@ const WaitlistForm: React.FC<WaitlistFormProps> = ({
               variant="primary"
               size="large"
               className="w-full"
-              onClick={() => {}}
+              type="submit"
               disabled={isSubmitting}
+              onClick={() => {}} // Empty onClick to avoid TypeScript errors
             >
               {isSubmitting ? 'Submitting...' : 'Join Waitlist'}
             </Button>

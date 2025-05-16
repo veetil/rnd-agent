@@ -2,8 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'About - IdeaCode',
-  description: 'Learn about IdeaCode\'s mission, vision, and the team behind the enterprise AI orchestration platform.',
+  title: 'About - IdeaCode R&D Agent Store',
+  description: 'Learn about IdeaCode\'s mission, vision, and the team behind the R&D Agent Store platform.',
 }
 
 export default function AboutPage() {
@@ -14,9 +14,9 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-50 to-white" />
         <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="h1 mb-6">About IdeaCode</h1>
+            <h1 className="h1 mb-6">About IdeaCode R&D Agent Store</h1>
             <p className="text-xl text-gray-600 mb-8">
-              We're building the future of enterprise AI orchestration.
+              We're building the future of AI research and development with specialized agents for every task.
             </p>
           </div>
         </div>
@@ -29,7 +29,7 @@ export default function AboutPage() {
             <div className="text-center mb-16">
               <h2 className="h2 mb-4">Our Mission</h2>
               <p className="text-xl text-gray-600">
-                To empower organizations with reliable, scalable, and portable AI agent systems that drive innovation and efficiency.
+                To empower researchers and developers with specialized AI agents that accelerate innovation and streamline the R&D process.
               </p>
             </div>
 
@@ -37,41 +37,41 @@ export default function AboutPage() {
               <div>
                 <h3 className="h3 mb-4">The Problem We're Solving</h3>
                 <p className="text-lg text-gray-600 mb-4">
-                  As AI systems become more complex and mission-critical, organizations face significant challenges in orchestrating, scaling, and maintaining these systems across different environments and models.
+                  Research and development teams face significant challenges in leveraging AI effectively. They need specialized tools for different tasks but struggle with fragmented solutions, inconsistent interfaces, and the steep learning curve of AI integration.
                 </p>
                 <p className="text-lg text-gray-600">
-                  The lack of standardization and enterprise-grade infrastructure leads to fragmented implementations, vendor lock-in, and operational inefficiencies.
+                  This leads to slower innovation cycles, duplicated efforts across teams, and difficulty scaling successful R&D initiatives into production-ready solutions.
                 </p>
               </div>
               <div className="bg-blue-50 p-8 rounded-lg">
                 <h3 className="h3 mb-4">Our Solution</h3>
                 <p className="text-lg text-gray-600 mb-4">
-                  IdeaCode provides an enterprise-grade orchestration layer that abstracts away the complexity of managing AI agent systems, enabling:
+                  The IdeaCode R&D Agent Store provides a marketplace of specialized AI agents designed specifically for research and development tasks:
                 </p>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex items-start">
                     <svg className="w-6 h-6 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Model portability and interoperability</span>
+                    <span>Task-specific AI agents for different R&D workflows</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-6 h-6 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Sophisticated orchestration workflows</span>
+                    <span>Consistent interface across all agents</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-6 h-6 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Persistent memory and context management</span>
+                    <span>Seamless integration with existing R&D tools</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-6 h-6 text-blue-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Enterprise-grade reliability and security</span>
+                    <span>Customizable agents for specific research domains</span>
                   </li>
                 </ul>
               </div>
@@ -169,16 +169,16 @@ export default function AboutPage() {
       {/* CTA section */}
       <section className="bg-blue-600 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 text-center">
-          <h2 className="h2 text-white mb-6">Ready to transform your AI operations?</h2>
+          <h2 className="h2 text-white mb-6">Ready to accelerate your R&D with AI?</h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-            Join the organizations that are leveraging IdeaCode to build scalable, reliable AI agent systems.
+            Join the researchers and developers who are using IdeaCode R&D Agent Store to transform their innovation process.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/contact" className="btn text-blue-600 bg-white hover:bg-blue-50">
-              Contact Sales
+            <Link href="/rnd-agent-store" className="btn text-blue-600 bg-white hover:bg-blue-50">
+              Explore Agents
             </Link>
-            <Link href="/documentation/getting-started" className="btn text-white border-2 border-white hover:bg-blue-700">
-              Get Started
+            <Link href="/contact" className="btn text-white border-2 border-white hover:bg-blue-700">
+              Join Waitlist
             </Link>
           </div>
         </div>

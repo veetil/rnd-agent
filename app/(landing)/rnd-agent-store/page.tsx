@@ -10,20 +10,20 @@ export const metadata: Metadata = {
     'research automation', 'innovation', 'product development',
     'machine learning', 'artificial intelligence'
   ],
-  authors: [{ name: 'IdeaCode', url: 'https://ideacode.com' }],
+  authors: [{ name: 'IdeaCode', url: 'https://ideacode.ai' }],
   creator: 'IdeaCode',
   publisher: 'IdeaCode',
   alternates: {
-    canonical: 'https://rndagentstore.com',
+    canonical: 'https://ideacode.ai',
   },
   openGraph: {
     title: 'R&D Agent Store - Transform Research into Code',
     description: 'The R&D Agent Store automates the journey from research insights to production-ready code, helping product teams accelerate innovation.',
-    url: 'https://rndagentstore.com',
-    siteName: 'R&D Agent Store',
+    url: 'https://ideacode.ai',
+    siteName: 'IdeaCode AI',
     images: [
       {
-        url: 'https://rndagentstore.com/og-image.jpg',
+        url: 'https://ideacode.ai/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'R&D Agent Store - Transform Research into Code'
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'R&D Agent Store - Transform Research into Code',
     description: 'The R&D Agent Store automates the journey from research insights to production-ready code, helping product teams accelerate innovation.',
-    creator: '@rndagentstore',
-    images: ['https://rndagentstore.com/twitter-image.jpg'],
+    creator: '@ideacode_ai',
+    images: ['https://ideacode.ai/twitter-image.jpg'],
   },
   robots: {
     index: true,

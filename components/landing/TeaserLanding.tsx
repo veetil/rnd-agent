@@ -17,18 +17,7 @@ const TeaserLanding: React.FC = () => {
     // Scroll to the waitlist form section
     document.getElementById('waitlist-section')?.scrollIntoView({ behavior: 'smooth' });
   };
-  
-  const handleWaitlistSubmit = async (email: string): Promise<void> => {
-    // In a real implementation, this would send the email to a backend API
-    console.log('Submitting email to waitlist:', email);
-    
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 1500);
-    });
-  };
+  // WaitlistForm now handles Supabase integration directly
 
   const navigationItems = [
     { label: 'Home', href: '/' },
@@ -40,7 +29,7 @@ const TeaserLanding: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header
-        logoSrc="/logo.svg"
+        logoSrc="" // Empty string to use the text logo instead of SVG
         navigationItems={navigationItems}
         ctaText="Join Waitlist"
         ctaAction={handleWaitlistSignup}
@@ -91,7 +80,6 @@ const TeaserLanding: React.FC = () => {
             </div>
             
             <WaitlistForm
-              onSubmit={handleWaitlistSubmit}
               className="mt-8"
             />
           </div>
@@ -99,9 +87,9 @@ const TeaserLanding: React.FC = () => {
       </main>
       
       <Footer
-        companyName="R&D Agent Store"
+        companyName="IdeaCode AI"
         copyrightYear={2025}
-        companyInfo="The R&D Agent Store automates the journey from research insights to production-ready code, helping product teams accelerate innovation."
+        companyInfo="IdeaCode AI automates the journey from research insights to production-ready code, helping product teams accelerate innovation."
         links={[
           { label: 'Home', href: '/' },
           { label: 'About', href: '/about' },
@@ -110,9 +98,9 @@ const TeaserLanding: React.FC = () => {
           { label: 'Contact', href: '/contact' }
         ]}
         socialLinks={[
-          { platform: 'twitter', href: 'https://twitter.com/rndagentstore' },
-          { platform: 'github', href: 'https://github.com/ideacode/rnd-agent-store' },
-          { platform: 'linkedin', href: 'https://linkedin.com/company/rnd-agent-store' }
+          { platform: 'twitter', href: 'https://twitter.com/ideacode_ai' },
+          { platform: 'github', href: 'https://github.com/ideacode/ideacode-ai' },
+          { platform: 'linkedin', href: 'https://linkedin.com/company/ideacode-ai' }
         ]}
       />
     </div>
