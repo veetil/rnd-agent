@@ -100,14 +100,17 @@ export function LoadingAnimation({
     }
     
     return (
-      <div 
+      <div
         className={`loading-animation-simple ${className}`}
+        data-testid="loading-spinner"
         style={{
           ...style,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color
+          color,
+          width: typeof size === 'number' ? `${size}px` : undefined,
+          height: typeof size === 'number' ? `${size}px` : undefined
         }}
       >
         {loadingText}
@@ -166,13 +169,16 @@ export function LoadingAnimation({
     const spinnerSize = getSize();
     
     return (
-      <div 
-        className="loading-spinner"
+      <div
+        className={`loading-spinner ${className}`}
+        data-testid="loading-spinner"
         style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          width: `${getSize()}px`,
+          height: `${getSize()}px`,
           ...getContainerStyles()
         }}
       >
@@ -182,7 +188,7 @@ export function LoadingAnimation({
             height: spinnerSize,
             borderRadius: '50%',
             border: `2px solid ${color}`,
-            borderTopColor: 'transparent',
+            borderTopColor: color,
             boxSizing: 'border-box'
           }}
           animate={{ rotate: 360 }}
@@ -216,8 +222,9 @@ export function LoadingAnimation({
     const dotSize = getSize() / 4;
     
     return (
-      <div 
+      <div
         className="loading-dots"
+        data-testid="loading-dots"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -269,8 +276,9 @@ export function LoadingAnimation({
     const pulseSize = getSize();
     
     return (
-      <div 
+      <div
         className="loading-pulse"
+        data-testid="loading-pulse"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -320,8 +328,9 @@ export function LoadingAnimation({
     const skeletonHeight = typeof height === 'number' ? height : 16;
     
     return (
-      <div 
+      <div
         className="loading-skeleton"
+        data-testid="loading-skeleton"
         style={{
           width,
           ...getContainerStyles()
@@ -376,8 +385,9 @@ export function LoadingAnimation({
     const clampedProgress = Math.min(100, Math.max(0, progress));
     
     return (
-      <div 
+      <div
         className="loading-progress"
+        data-testid="loading-progress"
         style={{
           width,
           ...getContainerStyles()
@@ -393,6 +403,7 @@ export function LoadingAnimation({
           }}
         >
           <motion.div
+            data-testid="loading-progress-bar"
             style={{
               height: '100%',
               backgroundColor: color,
@@ -672,7 +683,14 @@ export function LoadingAnimation({
   };
 
   return (
-    <div className={`loading-animation ${className}`} style={style}>
+    <div
+      className={`loading-animation ${className}`}
+      style={style}
+      data-testid="loading-animation"
+      data-loading="true"
+      data-type={type}
+      data-reduced-motion={reducedMotion ? 'true' : 'false'}
+    >
       {renderAnimation()}
     </div>
   );

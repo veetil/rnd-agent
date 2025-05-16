@@ -323,6 +323,16 @@ export function MicroInteraction({
     );
   };
 
+  // Filter out Framer Motion specific props from motionProps to avoid DOM warnings
+  const {
+    whileHover,
+    whileTap,
+    whileFocus,
+    whileDrag,
+    whileInView,
+    ...filteredMotionProps
+  } = motionProps;
+
   return (
     <motion.div
       className={`micro-interaction ${className}`}
@@ -342,7 +352,10 @@ export function MicroInteraction({
       variants={animationVariants}
       onAnimationStart={onAnimationStart}
       onAnimationComplete={onAnimationComplete}
-      {...motionProps}
+      data-testid="micro-interaction"
+      data-state={isActive ? 'hover' : 'normal'}
+      data-reduced-motion={reducedMotion ? 'true' : 'false'}
+      {...filteredMotionProps}
     >
       <div style={{ opacity: shouldHideContent() ? 0 : 1 }}>
         {children}

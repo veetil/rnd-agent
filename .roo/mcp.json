@@ -15,7 +15,8 @@
         "search_repositories",
         "create_repository",
         "create_branch",
-        "create_or_update_file"
+        "create_or_update_file",
+        "get_file_contents"
       ]
     },
     "perplexityai": {

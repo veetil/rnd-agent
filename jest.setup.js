@@ -52,7 +52,11 @@ class IntersectionObserverMock {
 // Set up mocks before tests
 beforeAll(() => {
   // Mock localStorage
-  global.localStorage = new LocalStorageMock();
+  const localStorageMock = new LocalStorageMock();
+  Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+    writable: false
+  });
   
   // Mock IntersectionObserver
   global.IntersectionObserver = IntersectionObserverMock;
@@ -74,10 +78,25 @@ beforeAll(() => {
 
   // Mock scrollTo
   window.scrollTo = jest.fn();
+  // Mock framer-motion
+  jest.mock('framer-motion', () => require('../src/__tests__/mocks/framer-motion.tsx'));
+  
+  // Mock next/router
+  jest.mock('next/router', () => require('../src/__tests__/mocks/next-router.tsx'));
+  
+  // Mock next/navigation
+  jest.mock('next/navigation', () => ({
+    usePathname: () => '/',
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      back: jest.fn()
+    })
+  }));
 });
 
 // Clean up after each test
 afterEach(() => {
-  localStorage.clear();
+  window.localStorage.clear();
   jest.clearAllMocks();
 });

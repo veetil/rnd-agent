@@ -187,9 +187,26 @@ export function AccessibilityProvider({
     announceToScreenReader,
   };
 
+  // Create a wrapper element with data attributes for testing
+  const wrappedChildren = (
+    <div
+      data-accessibility-wrapper="true"
+      data-font-size-multiplier={fontSizeMultiplier}
+      {...(highContrast && { 'data-high-contrast': 'true' })}
+      {...(focusIndicatorsVisible === false && { 'data-focus-indicators-hidden': 'true' })}
+      {...(prefersReducedMotion && { 'data-reduced-motion': 'true' })}
+      {...(focusIndicatorsVisible === false && { 'data-screen-reader-enabled': 'true' })}
+      style={{
+        display: 'contents', // This makes the div not affect layout
+      }}
+    >
+      {children}
+    </div>
+  );
+
   return (
     <AccessibilityContext.Provider value={value}>
-      {children}
+      {wrappedChildren}
       {/* Add global styles for accessibility */}
       {typeof document !== 'undefined' && (
         <style jsx global>{`

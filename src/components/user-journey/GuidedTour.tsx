@@ -276,11 +276,15 @@ export function GuidedTour({
         setTargetRect(rect);
 
         // Scroll to element if needed
-        if (currentStep.scrollTo !== false) {
-          element.scrollIntoView({
-            behavior: reducedMotion ? 'auto' : 'smooth',
-            block: 'center'
-          });
+        if (currentStep.scrollTo !== false && typeof element.scrollIntoView === 'function') {
+          try {
+            element.scrollIntoView({
+              behavior: reducedMotion ? 'auto' : 'smooth',
+              block: 'center'
+            });
+          } catch (error) {
+            console.warn('Failed to scroll to element:', error);
+          }
         }
 
         // Call onStepShown callback

@@ -250,6 +250,7 @@ export function ProgressiveDisclosure({
             exit={animate ? { height: 0, opacity: 0 } : undefined}
             transition={{ duration }}
             className="progressive-disclosure-content overflow-hidden"
+            id={uniqueId.current}
           >
             <div ref={contentRef} className="pt-2">
               {children}
@@ -287,7 +288,7 @@ export function ProgressiveDisclosure({
   return (
     <div className={`progressive-disclosure ${className}`}>
       {/* Header/Title section */}
-      <div 
+      <div
         className={`progressive-disclosure-header relative ${useReadMore ? '' : 'cursor-pointer'}`}
         onClick={useReadMore ? undefined : handleToggle}
         onMouseEnter={() => setTooltipVisible(true)}
@@ -295,6 +296,7 @@ export function ProgressiveDisclosure({
         role={useReadMore ? undefined : 'button'}
         aria-expanded={useReadMore ? undefined : expanded}
         tabIndex={useReadMore ? undefined : 0}
+        aria-controls={useReadMore ? undefined : uniqueId.current}
         onKeyDown={useReadMore ? undefined : (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();

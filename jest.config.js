@@ -16,6 +16,7 @@ const customJestConfig = {
   testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
   collectCoverage: true,
   coverageDirectory: 'coverage',
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'json-summary'],
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',

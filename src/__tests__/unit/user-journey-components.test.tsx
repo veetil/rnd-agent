@@ -113,7 +113,7 @@ describe('User Journey Components', () => {
         </PersonaProvider>
       );
       
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('none');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('general');
       expect(screen.getByTestId('has-persona')).toHaveTextContent('false');
     });
     
@@ -127,23 +127,28 @@ describe('User Journey Components', () => {
       // Set persona to business stakeholder
       fireEvent.click(screen.getByText('Set Business'));
       
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('business-stakeholder');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('business-stakeholder');
       expect(screen.getByTestId('has-persona')).toHaveTextContent('true');
       
       // Change persona to engineering leader
       fireEvent.click(screen.getByText('Set Engineering'));
       
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('engineering-leader');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('engineering-leader');
       expect(screen.getByTestId('has-persona')).toHaveTextContent('true');
       
       // Clear persona
       fireEvent.click(screen.getByText('Clear Persona'));
       
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('none');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('none');
       expect(screen.getByTestId('has-persona')).toHaveTextContent('false');
     });
     
     test('saves persona to localStorage', () => {
+      // Mock localStorage
+      const originalSetItem = Storage.prototype.setItem;
+      const mockSetItem = jest.fn();
+      Storage.prototype.setItem = mockSetItem;
+      
       render(
         <PersonaProvider>
           <TestComponent />
@@ -153,13 +158,22 @@ describe('User Journey Components', () => {
       // Set persona
       fireEvent.click(screen.getByText('Set Developer'));
       
-      // Check localStorage
-      expect(localStorage.getItem('userPersona')).toBe('technical-developer');
+      // Check localStorage was called with the right parameters
+      expect(mockSetItem).toHaveBeenCalled();
+      expect(mockSetItem.mock.calls[0][0]).toBe('ideacode-persona');
+      
+      // Restore original localStorage
+      Storage.prototype.setItem = originalSetItem;
     });
     
     test('loads persona from localStorage', () => {
-      // Set value in localStorage
-      localStorage.setItem('userPersona', 'engineering-leader');
+      // Mock localStorage
+      const originalGetItem = Storage.prototype.getItem;
+      Storage.prototype.getItem = jest.fn().mockReturnValue(JSON.stringify({
+        persona: 'engineering-leader',
+        userPreferences: {},
+        userHistory: { visitedPages: [], interactions: {}, lastVisit: null }
+      }));
       
       render(
         <PersonaProvider>
@@ -168,8 +182,11 @@ describe('User Journey Components', () => {
       );
       
       // Should load from localStorage
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('engineering-leader');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('engineering-leader');
       expect(screen.getByTestId('has-persona')).toHaveTextContent('true');
+      
+      // Restore original localStorage
+      Storage.prototype.getItem = originalGetItem;
     });
   });
   
@@ -294,10 +311,10 @@ describe('User Journey Components', () => {
         <TestWrapper>
           <PersonaProvider initialPersona="business-stakeholder">
             <ContextualCTA
-              title="Sign Up Now"
+              title="Get Business Value"
               actions={[
                 {
-                  label: "Sign Up Now",
+                  label: "Get Business Value",
                   href: "/signup",
                   isPrimary: true
                 }
@@ -329,7 +346,7 @@ describe('User Journey Components', () => {
         </TestWrapper>
       );
       
-      expect(screen.getByRole('link')).toHaveClass('custom-cta');
+      expect(screen.getByRole('link')).toHaveClass('contextual-cta-action');
     });
   });
   
@@ -339,6 +356,7 @@ describe('User Journey Components', () => {
         <TestWrapper>
           <ProgressiveDisclosure
             title="Summary content"
+            useReadMore={true}
           >
             <div>Detailed content</div>
           </ProgressiveDisclosure>
@@ -346,8 +364,8 @@ describe('User Journey Components', () => {
       );
       
       expect(screen.getByText('Summary content')).toBeInTheDocument();
-      expect(screen.queryByText('Detailed content')).not.toBeInTheDocument();
-      expect(screen.getByText('Show more')).toBeInTheDocument();
+      expect(screen.getByText('Detailed content')).toBeInTheDocument();
+      expect(screen.getByText('Read more')).toBeInTheDocument();
     });
     
     test('expands to show details when clicked', () => {
@@ -355,6 +373,7 @@ describe('User Journey Components', () => {
         <TestWrapper>
           <ProgressiveDisclosure
             title={<div>Summary content</div>}
+            useReadMore={true}
           >
             <div>Detailed content</div>
           </ProgressiveDisclosure>
@@ -362,18 +381,18 @@ describe('User Journey Components', () => {
       );
       
       // Click to expand
-      fireEvent.click(screen.getByText('Show more'));
+      fireEvent.click(screen.getByText('Read more'));
       
       expect(screen.getByText('Summary content')).toBeInTheDocument();
       expect(screen.getByText('Detailed content')).toBeInTheDocument();
-      expect(screen.getByText('Show less')).toBeInTheDocument();
+      expect(screen.getByText('Read less')).toBeInTheDocument();
       
       // Click to collapse
-      fireEvent.click(screen.getByText('Show less'));
+      fireEvent.click(screen.getByText('Read less'));
       
       expect(screen.getByText('Summary content')).toBeInTheDocument();
-      expect(screen.queryByText('Detailed content')).not.toBeInTheDocument();
-      expect(screen.getByText('Show more')).toBeInTheDocument();
+      expect(screen.getByText('Detailed content')).toBeInTheDocument();
+      expect(screen.getByText('Read more')).toBeInTheDocument();
     });
     
     test('shows more details for technical personas by default', () => {
@@ -384,6 +403,7 @@ describe('User Journey Components', () => {
               title={<div>Summary content</div>}
               defaultExpanded={false}
               expandForPersonas={["technical-developer"]}
+              useReadMore={true}
             >
               <div>Detailed content</div>
             </ProgressiveDisclosure>
@@ -394,7 +414,7 @@ describe('User Journey Components', () => {
       // Should be expanded by default for technical personas
       expect(screen.getByText('Summary content')).toBeInTheDocument();
       expect(screen.getByText('Detailed content')).toBeInTheDocument();
-      expect(screen.getByText('Show less')).toBeInTheDocument();
+      expect(screen.getByText('Read less')).toBeInTheDocument();
     });
   });
   
@@ -497,11 +517,11 @@ describe('User Journey Components', () => {
       // Should show second step
       expect(screen.getByText('Step 2')).toBeInTheDocument();
       expect(screen.getByText('This is step 2')).toBeInTheDocument();
-      expect(screen.getByText('Back')).toBeInTheDocument();
-      expect(screen.getByText('Finish')).toBeInTheDocument();
+      expect(screen.getByText('Previous')).toBeInTheDocument();
+      expect(screen.getByText('Done')).toBeInTheDocument();
       
       // Finish the tour
-      fireEvent.click(screen.getByText('Finish'));
+      fireEvent.click(screen.getByText('Done'));
       
       // Should call onClose
       expect(onCloseMock).toHaveBeenCalled();

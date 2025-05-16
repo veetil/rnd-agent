@@ -512,9 +512,12 @@ export function MobileNavigation({
             padding: isHorizontal ? '0' : '1rem'
           }}
         >
-          {items.map((item, index) => (
-            <div
+          {items.map((item, index) => {
+            const ItemTag = item.href ? 'a' : 'div';
+            return (
+            <ItemTag
               key={index}
+              href={item.href}
               className={`mobile-navigation-item ${item.isActive ? 'mobile-navigation-item-active' : ''}`}
               style={{
                 display: 'flex',
@@ -525,9 +528,17 @@ export function MobileNavigation({
                 cursor: item.disabled ? 'not-allowed' : 'pointer',
                 opacity: item.disabled ? 0.6 : 1,
                 position: 'relative',
-                flex: isHorizontal ? '1' : undefined
+                flex: isHorizontal ? '1' : undefined,
+                textDecoration: 'none'
               }}
-              onClick={() => !item.disabled && handleItemClick(item)}
+              onClick={(e) => {
+                if (item.disabled) {
+                  e.preventDefault();
+                  return;
+                }
+                handleItemClick(item);
+              }}
+              aria-current={item.isActive ? 'page' : undefined}
             >
               {/* Icon */}
               {item.icon && (
@@ -581,8 +592,9 @@ export function MobileNavigation({
                   {item.badge}
                 </div>
               )}
-            </div>
-          ))}
+            </ItemTag>
+            );
+          })}
         </div>
       </motion.div>
     </>

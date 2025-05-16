@@ -161,15 +161,15 @@ describe('Foundation Components', () => {
       );
       
       // Check default value
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('none');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('general');
       
       // Change persona
       fireEvent.click(screen.getByText('Set Developer'));
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('developer');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('technical-developer');
       
       // Change to another persona
       fireEvent.click(screen.getByText('Set Business'));
-      expect(screen.getByTestId('current-persona')).toHaveTextContent('business');
+      expect(screen.getAllByTestId('current-persona')[0]).toHaveTextContent('business-stakeholder');
     });
   });
   

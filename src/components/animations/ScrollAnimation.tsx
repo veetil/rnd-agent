@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState, useEffect, CSSProperties } from 'react';
+import React, { ReactNode, useRef, useState, useEffect, CSSProperties, RefCallback } from 'react';
 import { motion, Variants, useAnimation, AnimationControls } from 'framer-motion';
 import { useAnimation as useAnimationContext } from './AnimationContext';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
@@ -69,7 +69,7 @@ export interface ScrollAnimationProps {
 /**
  * Component for scroll-triggered animations
  */
-export function ScrollAnimation({
+export const ScrollAnimation = React.forwardRef<HTMLDivElement, ScrollAnimationProps>(({
   children,
   type = 'fade-up',
   duration = 0.6,
@@ -90,13 +90,13 @@ export function ScrollAnimation({
   transformOrigin = 'center',
   direction = 'normal',
   useWillChange = true
-}: ScrollAnimationProps) {
+}, forwardedRef) => {
   const controls = useAnimation();
   const { animationsEnabled, reducedMotion, animationSpeed } = useAnimationContext();
   const [hasAnimated, setHasAnimated] = useState(false);
   
   // Use the useScrollAnimation hook to detect when the element is in view
-  const [ref, isInView] = useScrollAnimation({
+  const [animationRef, isInView] = useScrollAnimation({
     threshold,
     rootMargin,
     once,
@@ -457,9 +457,28 @@ export function ScrollAnimation({
     }
   }, [animateOnMount, controls, onAnimationStart, onAnimationComplete]);
 
+  // Create a ref callback that handles both refs
+  const setRefs: RefCallback<HTMLDivElement> = (element) => {
+    // Set the animation ref
+    if (animationRef) {
+      // @ts-ignore - we need to set this for the hook to work
+      animationRef.current = element;
+    }
+    
+    // Forward the ref
+    if (forwardedRef) {
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(element);
+      } else {
+        // @ts-ignore - we need to set this for the forwarded ref to work
+        forwardedRef.current = element;
+      }
+    }
+  };
+
   return (
     <motion.div
-      ref={ref}
+      ref={setRefs}
       className={`scroll-animation ${className}`}
       style={{
         ...style,
@@ -469,11 +488,14 @@ export function ScrollAnimation({
       initial="hidden"
       animate={controls}
       variants={animationVariants}
+      data-testid="scroll-animation"
+      data-animate="true"
+      data-reduced-motion={reducedMotion ? 'true' : 'false'}
     >
       {children}
     </motion.div>
   );
-}
+});
 
 /**
  * Component for staggered scroll animations
@@ -490,7 +512,7 @@ export interface StaggeredScrollAnimationProps extends Omit<ScrollAnimationProps
 /**
  * Component for staggered scroll animations
  */
-export function StaggeredScrollAnimation({
+export const StaggeredScrollAnimation = React.forwardRef<HTMLDivElement, StaggeredScrollAnimationProps>(({
   children,
   type = 'fade-up',
   duration = 0.6,
@@ -513,14 +535,14 @@ export function StaggeredScrollAnimation({
   transformOrigin = 'center',
   direction = 'normal',
   useWillChange = true
-}: StaggeredScrollAnimationProps) {
+}, forwardedRef) => {
   const controls = useAnimation();
   const { animationsEnabled, reducedMotion, animationSpeed } = useAnimationContext();
   const [hasAnimated, setHasAnimated] = useState(false);
   const [childElements, setChildElements] = useState<Element[]>([]);
   
   // Use the useScrollAnimation hook to detect when the element is in view
-  const [ref, isInView] = useScrollAnimation({
+  const [animationRef, isInView] = useScrollAnimation({
     threshold,
     rootMargin,
     once,
@@ -543,8 +565,8 @@ export function StaggeredScrollAnimation({
 
   // Get child elements for staggering
   useEffect(() => {
-    if (ref.current) {
-      const elements = Array.from(ref.current.querySelectorAll(childSelector));
+    if (animationRef.current) {
+      const elements = Array.from(animationRef.current.querySelectorAll(childSelector));
       setChildElements(elements);
     }
   }, [childSelector, children]);
@@ -691,9 +713,28 @@ export function StaggeredScrollAnimation({
     });
   };
 
+  // Create a ref callback that handles both refs
+  const setRefs: RefCallback<HTMLDivElement> = (element) => {
+    // Set the animation ref
+    if (animationRef) {
+      // @ts-ignore - we need to set this for the hook to work
+      animationRef.current = element;
+    }
+    
+    // Forward the ref
+    if (forwardedRef) {
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(element);
+      } else {
+        // @ts-ignore - we need to set this for the forwarded ref to work
+        forwardedRef.current = element;
+      }
+    }
+  };
+
   return (
     <motion.div
-      ref={ref}
+      ref={setRefs}
       className={`staggered-scroll-animation ${className}`}
       style={{
         ...style,
@@ -706,7 +747,7 @@ export function StaggeredScrollAnimation({
       {renderStaggeredChildren()}
     </motion.div>
   );
-}
+});
 
 /**
  * Component for scroll-triggered parallax animations
@@ -733,7 +774,7 @@ export interface ParallaxScrollAnimationProps {
 /**
  * Component for scroll-triggered parallax animations
  */
-export function ParallaxScrollAnimation({
+export const ParallaxScrollAnimation = React.forwardRef<HTMLDivElement, ParallaxScrollAnimationProps>(({
   children,
   speed = 0.5,
   direction = 'up',
@@ -742,7 +783,7 @@ export function ParallaxScrollAnimation({
   style = {},
   easing = 'linear',
   useWillChange = true
-}: ParallaxScrollAnimationProps) {
+}, forwardedRef) => {
   const ref = useRef<HTMLDivElement>(null);
   const { animationsEnabled, reducedMotion } = useAnimationContext();
   const [scrollY, setScrollY] = useState(0);
@@ -799,9 +840,28 @@ export function ParallaxScrollAnimation({
     }
   };
 
+  // Create a ref callback that handles both refs
+  const setRefs: RefCallback<HTMLDivElement> = (element) => {
+    // Set the internal ref
+    if (ref) {
+      // @ts-ignore - we need to set this for the hook to work
+      ref.current = element;
+    }
+    
+    // Forward the ref
+    if (forwardedRef) {
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(element);
+      } else {
+        // @ts-ignore - we need to set this for the forwarded ref to work
+        forwardedRef.current = element;
+      }
+    }
+  };
+
   return (
     <div
-      ref={ref}
+      ref={setRefs}
       className={`parallax-scroll-animation ${className}`}
       style={{
         ...style,
@@ -813,4 +873,4 @@ export function ParallaxScrollAnimation({
       {children}
     </div>
   );
-}
+});

@@ -98,9 +98,24 @@ export function AnimationProvider({
     setAnimationSpeed: handleSetAnimationSpeed,
   };
 
+  // Create a wrapper element with data attributes for testing
+  const wrappedChildren = (
+    <div
+      data-animation-wrapper="true"
+      data-animations-enabled={animationsEnabled.toString()}
+      data-animation-speed={animationSpeed}
+      data-reduced-motion={prefersReducedMotion.toString()}
+      style={{
+        display: 'contents', // This makes the div not affect layout
+      }}
+    >
+      {children}
+    </div>
+  );
+
   return (
     <AnimationContext.Provider value={value}>
-      {children}
+      {wrappedChildren}
     </AnimationContext.Provider>
   );
 }

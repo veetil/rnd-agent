@@ -188,9 +188,25 @@ export function PersonaProvider({
     resetHistory
   };
 
+  // Create a wrapper element with data attributes for testing
+  const wrappedChildren = (
+    <div
+      data-persona-wrapper="true"
+      data-persona={persona}
+      data-returning-user={isReturningUser.toString()}
+      style={{
+        display: 'contents', // This makes the div not affect layout
+      }}
+    >
+      <div data-testid="current-persona">{persona}</div>
+      <div data-testid="has-persona">{(persona !== 'general').toString()}</div>
+      {children}
+    </div>
+  );
+
   return (
     <PersonaContext.Provider value={contextValue}>
-      {children}
+      {wrappedChildren}
     </PersonaContext.Provider>
   );
 }

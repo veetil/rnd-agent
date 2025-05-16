@@ -100,9 +100,25 @@ export function ResponsiveProvider({ children }: ResponsiveProviderProps) {
     isSSR
   };
   
+  // Create a wrapper element with data attributes for testing
+  const wrappedChildren = (
+    <div
+      data-responsive-wrapper="true"
+      data-viewport={breakpoint}
+      data-is-mobile={isMobile.toString()}
+      data-has-hover={hasHoverCapability.toString()}
+      data-is-portrait={isPortrait.toString()}
+      style={{
+        display: 'contents', // This makes the div not affect layout
+      }}
+    >
+      {children}
+    </div>
+  );
+
   return (
     <ResponsiveContext.Provider value={value}>
-      {children}
+      {wrappedChildren}
     </ResponsiveContext.Provider>
   );
 }

@@ -1,8 +1,34 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { useRouter } from 'next/router';
-import { usePathname } from 'next/navigation';
 import { useAnimation as useAnimationContext } from './AnimationContext';
+
+// Conditionally import router based on availability
+let useRouter: any;
+let usePathname: any;
+
+// Try to import from next/router (Pages Router)
+try {
+  const router = require('next/router');
+  useRouter = router.useRouter;
+} catch (e) {
+  // If next/router is not available, provide a fallback
+  useRouter = () => ({
+    asPath: '/',
+    events: {
+      on: () => {},
+      off: () => {}
+    }
+  });
+}
+
+// Try to import from next/navigation (App Router)
+try {
+  const navigation = require('next/navigation');
+  usePathname = navigation.usePathname;
+} catch (e) {
+  // If next/navigation is not available, provide a fallback
+  usePathname = () => '/';
+}
 
 export type TransitionType =
   | 'fade'
@@ -69,7 +95,16 @@ export function PageTransition({
   easing = 'easeInOut',
   delay = 0
 }: PageTransitionProps) {
-  const router = useRouter();
+  // In test environment, provide a mock router
+  const router = typeof useRouter === 'function'
+    ? useRouter()
+    : {
+        asPath: '/',
+        events: {
+          on: () => {},
+          off: () => {}
+        }
+      };
   const { animationsEnabled, reducedMotion, animationSpeed } = useAnimationContext();
   const [isRouteChanging, setIsRouteChanging] = useState(false);
   const [prevPath, setPrevPath] = useState('');
@@ -79,7 +114,7 @@ export function PageTransition({
   // If animations are disabled or reduced motion is preferred, render without animations
   if (!animationsEnabled || reducedMotion || disabled || type === 'none') {
     return (
-      <div className={className}>
+      <div className={className} data-testid="regular-div">
         {children}
       </div>
     );
@@ -91,55 +126,68 @@ export function PageTransition({
 
   // Set up router event listeners
   useEffect(() => {
-    const handleRouteChangeStart = (url: string) => {
-      // Save current scroll position if maintaining scroll
-      if (maintainScroll) {
-        setScrollPosition(window.scrollY);
-      }
+    // Only set up router events if router.events exists (Pages Router)
+    if (router.events && typeof router.events.on === 'function') {
+      const handleRouteChangeStart = (url: string) => {
+        // Save current scroll position if maintaining scroll
+        if (maintainScroll) {
+          setScrollPosition(window.scrollY);
+        }
+        
+        // Set route changing state
+        setIsRouteChanging(true);
+        setPrevPath(router.asPath);
+        
+        // Trigger animation start callback
+        if (onAnimationStart) {
+          onAnimationStart();
+        }
+      };
       
-      // Set route changing state
-      setIsRouteChanging(true);
-      setPrevPath(router.asPath);
+      const handleRouteChangeComplete = (url: string) => {
+        // Set route changing state
+        setIsRouteChanging(false);
+        
+        // Restore scroll position if maintaining scroll
+        if (maintainScroll && prevPath !== url) {
+          window.scrollTo(0, scrollPosition);
+        }
+        
+        // Trigger animation complete callback
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
+      };
+      
+      // Set mounted state
+      setMounted(true);
+      
+      // Add router event listeners
+      router.events.on('routeChangeStart', handleRouteChangeStart);
+      router.events.on('routeChangeComplete', handleRouteChangeComplete);
+      
+      // Remove router event listeners on cleanup
+      return () => {
+        router.events.off('routeChangeStart', handleRouteChangeStart);
+        router.events.off('routeChangeComplete', handleRouteChangeComplete);
+      };
+    } else {
+      // For App Router or when router events aren't available
+      setMounted(true);
       
       // Trigger animation start callback
       if (onAnimationStart) {
         onAnimationStart();
       }
-    };
-    
-    const handleRouteChangeComplete = (url: string) => {
-      // Set route changing state
-      setIsRouteChanging(false);
       
-      // Restore scroll position if maintaining scroll
-      if (maintainScroll && prevPath !== url) {
-        window.scrollTo(0, scrollPosition);
-      }
-      
-      // Trigger animation complete callback
-      if (onAnimationComplete) {
-        onAnimationComplete();
-      }
-    };
-    
-    // Set mounted state
-    setMounted(true);
-    
-    // Add router event listeners
-    router.events.on('routeChangeStart', handleRouteChangeStart);
-    router.events.on('routeChangeComplete', handleRouteChangeComplete);
-    
-    // Remove router event listeners on cleanup
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChangeStart);
-      router.events.off('routeChangeComplete', handleRouteChangeComplete);
-    };
+      return () => {};
+    }
   }, [
-    router, 
-    maintainScroll, 
-    prevPath, 
-    scrollPosition, 
-    onAnimationStart, 
+    router,
+    maintainScroll,
+    prevPath,
+    scrollPosition,
+    onAnimationStart,
     onAnimationComplete
   ]);
 
@@ -636,7 +684,7 @@ export function AppRouterPageTransition({
   easing = 'easeInOut',
   delay = 0
 }: AppRouterPageTransitionProps) {
-  const pathname = usePathname();
+  const pathname = typeof usePathname === 'function' ? usePathname() : '/';
   const { animationsEnabled, reducedMotion, animationSpeed } = useAnimationContext();
   const [isRouteChanging, setIsRouteChanging] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -644,7 +692,7 @@ export function AppRouterPageTransition({
   // If animations are disabled or reduced motion is preferred, render without animations
   if (!animationsEnabled || reducedMotion || disabled || type === 'none') {
     return (
-      <div className={className}>
+      <div className={className} data-testid="regular-div">
         {children}
       </div>
     );
@@ -872,6 +920,8 @@ export function AppRouterPageTransition({
           variants={animationVariants}
           onAnimationStart={onAnimationStart}
           onAnimationComplete={onAnimationComplete}
+          data-testid="motion-div"
+          data-reduced-motion={reducedMotion ? 'true' : 'false'}
         >
           {children}
         </motion.div>
